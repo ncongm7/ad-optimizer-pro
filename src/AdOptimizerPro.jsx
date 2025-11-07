@@ -659,7 +659,6 @@ const AdGroupRow = ({ adGroup, index, onUpdate, onRemove }) => {
   const styles = {
     row: {
       display: "grid",
-      gridTemplateColumns: "2fr 1fr 1fr 1fr 1.5fr 60px",
       gap: "12px",
       padding: "20px",
       backgroundColor: "#1e1e2e",
@@ -738,8 +737,6 @@ const AdGroupRow = ({ adGroup, index, onUpdate, onRemove }) => {
       transition: "all 0.2s",
     },
     removeBtn: {
-      width: "50px",
-      height: "50px",
       backgroundColor: "#f38ba8",
       color: "#1e1e2e",
       border: "none",
@@ -1141,7 +1138,6 @@ const ResultsDisplay = ({ results, adGroups }) => {
       borderRadius: "10px",
       marginBottom: "25px",
       display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
       gap: "15px",
     },
     summaryItem: {
@@ -1399,7 +1395,7 @@ const AdOptimizerPro = () => {
 
   return (
     <div style={styles.container} className="root-container">
-      <div style={styles.maxWidth}>
+      <div style={styles.maxWidth} className="max-width">
         <h1 style={styles.title} className="page-title">
           ⚡ AdOptimizer Pro
         </h1>
