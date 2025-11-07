@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "./AdOptimizerPro.css";
 
 // ============================================================
 // UTILITY: Decision Logic Engine - "Săn đơn Chớp nhoáng"
@@ -607,7 +608,7 @@ const ProductManager = ({
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="product-row">
       <div style={styles.header}>📦 Quản Lý Sản Phẩm</div>
 
       <div style={styles.row}>
@@ -777,7 +778,7 @@ const AdGroupRow = ({ adGroup, index, onUpdate, onRemove }) => {
 
   return (
     <>
-      <div style={styles.row}>
+      <div style={styles.row} className="adgroup-row">
         <div style={styles.field}>
           <label style={styles.label}>Tên Nhóm</label>
           <input
@@ -873,6 +874,7 @@ const AdGroupRow = ({ adGroup, index, onUpdate, onRemove }) => {
           style={styles.removeBtn}
           onClick={() => onRemove(index)}
           title="Xóa nhóm"
+          className="remove-btn"
         >
           🗑️
         </button>
@@ -1091,7 +1093,7 @@ const ResultCard = ({ result, adGroup }) => {
   };
 
   return (
-    <div style={styles.card}>
+    <div style={styles.card} className="result-card">
       <div style={styles.header}>
         <div style={styles.title}>{adGroup.tennhom || "Nhóm không tên"}</div>
         <div style={styles.action}>{result.action}</div>
@@ -1170,10 +1172,10 @@ const ResultsDisplay = ({ results, adGroups }) => {
   const giuCount = results.filter((r) => r.action.includes("GIỮ")).length;
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="results-wrapper">
       <div style={styles.header}>📈 Kết Quả Phân Tích</div>
 
-      <div style={styles.summary}>
+      <div style={styles.summary} className="summary-grid">
         <div style={styles.summaryItem}>
           <div style={styles.summaryLabel}>Tổng nhóm</div>
           <div style={styles.summaryValue}>{totalGroups}</div>
@@ -1251,9 +1253,30 @@ const AdOptimizerPro = () => {
   );
   const currentAdGroups = currentProduct?.adGroups || [];
 
+  const createDefaultGroups = () => {
+    return Array.from({ length: 3 }, (_, i) => ({
+      id: Date.now() + i,
+      tennhom: `Nhóm ${i + 1}`,
+      sodon: 5,
+      cpa: "",
+      datieu: "",
+      ngansach: 150000,
+    }));
+  };
+
   const handleProductChange = (productId) => {
     setSelectedProductId(productId);
     setResults([]);
+    const numericId = parseInt(productId);
+    if (!numericId) return;
+    setProducts((prev) =>
+      prev.map((p) => {
+        if (p.id === numericId && (!p.adGroups || p.adGroups.length === 0)) {
+          return { ...p, adGroups: createDefaultGroups() };
+        }
+        return p;
+      })
+    );
   };
 
   const handleAddProduct = () => {
@@ -1265,11 +1288,12 @@ const AdOptimizerPro = () => {
       id: Date.now(),
       name,
       cpaLimit,
-      adGroups: [],
+      adGroups: createDefaultGroups(),
     };
     setProducts([...products, newProduct]);
     setShowAddModal(false);
-    alert("✅ Thêm sản phẩm thành công!");
+    setSelectedProductId(String(newProduct.id));
+    alert("✅ Thêm sản phẩm thành công! Tự động tạo 3 nhóm.");
   };
 
   const handleSaveProduct = () => {
@@ -1374,10 +1398,12 @@ const AdOptimizerPro = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="root-container">
       <div style={styles.maxWidth}>
-        <h1 style={styles.title}>⚡ AdOptimizer Pro</h1>
-        <div style={styles.subtitle}>
+        <h1 style={styles.title} className="page-title">
+          ⚡ AdOptimizer Pro
+        </h1>
+        <div style={styles.subtitle} className="page-subtitle">
           Chiến lược "Săn đơn Chớp nhoáng" - Mục tiêu: 50 đơn/ngày
         </div>
 
