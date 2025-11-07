@@ -792,6 +792,8 @@ const AdGroupRow = ({ adGroup, index, onUpdate, onRemove }) => {
           <div style={styles.sodonContainer}>
             <input
               type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
               style={{ ...styles.input, ...styles.sodonInput }}
               value={adGroup.sodon}
               onChange={(e) => handleChange("sodon", e.target.value)}
@@ -859,6 +861,8 @@ const AdGroupRow = ({ adGroup, index, onUpdate, onRemove }) => {
           <label style={styles.label}>Ngân Sách (₫)</label>
           <input
             type="number"
+            inputMode="numeric"
+            pattern="[0-9]*"
             style={styles.input}
             value={adGroup.ngansach}
             onChange={(e) => handleChange("ngansach", e.target.value)}
@@ -1018,9 +1022,10 @@ const ActionButton = ({ onClick, isLoading }) => {
 };
 
 // ============================================================
-// ResultCard Component
+// ResultCard Component (accordion on mobile)
 // ============================================================
 const ResultCard = ({ result, adGroup }) => {
+  const [open, setOpen] = useState(false);
   const getActionColor = (action) => {
     if (action.includes("TĂNG")) return "#a6e3a1";
     if (action.includes("GIẢM") || action.includes("TẮT")) return "#f38ba8";
@@ -1091,22 +1096,30 @@ const ResultCard = ({ result, adGroup }) => {
 
   return (
     <div style={styles.card} className="result-card">
-      <div style={styles.header}>
+      <div style={styles.header} onClick={() => setOpen((o) => !o)}>
         <div style={styles.title}>{adGroup.tennhom || "Nhóm không tên"}</div>
         <div style={styles.action}>{result.action}</div>
       </div>
-
+      {/* Always show budget; collapse rest on mobile by default */}
       <div style={styles.budget}>{result.newBudget.toLocaleString()}₫</div>
-
-      <div style={styles.reason}>{result.reason}</div>
-
-      {result.expertNote && (
-        <div style={styles.expertNote}>{result.expertNote}</div>
-      )}
-
-      {result.timeFrame && (
-        <div style={styles.timeFrame}>Khung giờ: {result.timeFrame}</div>
-      )}
+      <div className="desktop-only">
+        <div style={styles.reason}>{result.reason}</div>
+        {result.expertNote && (
+          <div style={styles.expertNote}>{result.expertNote}</div>
+        )}
+        {result.timeFrame && (
+          <div style={styles.timeFrame}>Khung giờ: {result.timeFrame}</div>
+        )}
+      </div>
+      <div className="mobile-only" style={{ display: open ? "block" : "none" }}>
+        <div style={styles.reason}>{result.reason}</div>
+        {result.expertNote && (
+          <div style={styles.expertNote}>{result.expertNote}</div>
+        )}
+        {result.timeFrame && (
+          <div style={styles.timeFrame}>Khung giờ: {result.timeFrame}</div>
+        )}
+      </div>
     </div>
   );
 };
@@ -1418,8 +1431,17 @@ const AdOptimizerPro = () => {
               adGroups={currentAdGroups}
               onAdGroupsChange={handleAdGroupsChange}
             />
-
-            <ActionButton onClick={handleCheck} isLoading={isLoading} />
+            <div className="desktop-only">
+              <ActionButton onClick={handleCheck} isLoading={isLoading} />
+            </div>
+            <button
+              className="fab-check mobile-only"
+              onClick={handleCheck}
+              disabled={isLoading}
+              title="Kiểm tra & đề xuất"
+            >
+              {isLoading ? "⏳" : "🚀"}
+            </button>
 
             <ResultsDisplay results={results} adGroups={currentAdGroups} />
           </>

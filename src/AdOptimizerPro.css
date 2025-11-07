@@ -58,6 +58,13 @@
   }
 }
 @media (max-width: 700px) {
+  .page-title {
+    font-size: 28px;
+  }
+  .page-subtitle {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
   .adgroup-row {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -121,4 +128,54 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #585b70;
+}
+
+/* Helpers */
+.mobile-only {
+  display: none;
+}
+.desktop-only {
+  display: block;
+}
+@media (max-width: 700px) {
+  .mobile-only {
+    display: block;
+  }
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* Floating action button for mobile */
+.fab-check {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1100;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a6e3a1, #94e2d5);
+  color: #1e1e2e;
+  border: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (min-width: 701px) {
+  .fab-check {
+    display: none;
+  }
+}
+
+/* Bigger tap targets for increment buttons on mobile */
+@media (max-width: 700px) {
+  .adgroup-row .incrementBtns button,
+  .adgroup-row .incrementBtns .incrementBtn {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
